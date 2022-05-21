@@ -9,13 +9,52 @@
 #include <unordered_map>
 #include <sstream>
 #include <vector>
+#include <time.h>
 
 float StrToFloat(std::string _str);
 int StrToInt(std::string _str);
 bool StrToBool(std::string _str);
+Move GenerateMove(Pokemon* _pokemon, std::unordered_map<int,Move> _movesDex);
+std::string ToUpper(std::string _str);
 
 int main()
 {
+#pragma region
+	// Open file & populate Movedex with Moves
+	std::unordered_map<int, Move> MovesDex;
+	std::ifstream movesFile("moves.csv");
+	std::string currline;
+	int moveID = 1;
+	while (std::getline(movesFile, currline)) {
+		std::istringstream iss(currline);
+		std::string lineStream;
+
+		std::vector<std::string> strVector;
+
+		while (std::getline(iss, lineStream, ',')) {
+			strVector.push_back(lineStream);
+		}
+
+		Move currMove;
+
+		currMove.mName = strVector[0];
+		currMove.mType = strVector[1];
+		currMove.mCategory = strVector[2];
+		currMove.mPower = stoi(strVector[3]);
+		currMove.mAccuracy = stof(strVector[4]);
+		currMove.mNotes = strVector[5];
+		currMove.mMoveID = moveID;
+		moveID++;
+
+		// Insert Move into Movedex 
+		std::pair<int, Move> currPair(currMove.mMoveID, currMove);
+		MovesDex.insert(currPair);
+	}
+	movesFile.close();
+#pragma endregion MovesDex
+
+
+#pragma region
 	// Open file & populate Pokedex with Pokemon 
 	std::unordered_map<int, Pokemon*> NationalDex;
 	std::ifstream pokemonFile("pokemon.csv");
@@ -107,6 +146,11 @@ int main()
 		// Set Capture Rate
 		currPokemon->mCaptureRate = stoi(strVec[35]);
 
+		// Generate Moves
+		currPokemon->mMove1 = GenerateMove(currPokemon, MovesDex);
+		currPokemon->mMove2 = GenerateMove(currPokemon, MovesDex);
+		currPokemon->mMove3 = GenerateMove(currPokemon, MovesDex);
+		currPokemon->mMove4 = GenerateMove(currPokemon, MovesDex);
 
 		// Insert Pokemon into Pokedex 
 		std::pair<int, Pokemon*> currPair(currPokemon->mPokedexNumber, currPokemon);
@@ -114,7 +158,9 @@ int main()
 		NationalDex.find(currPokemon->mPokedexNumber)->second->Display();
 	}
 	pokemonFile.close();
+#pragma endregion NationalDex
 
+	
 
 }
 
@@ -132,7 +178,20 @@ bool StrToBool(std::string _str) {
 	else
 		return false;
 }
+Move GenerateMove(Pokemon* _pokemon, std::unordered_map<int, Move> _movesDex) {
+	Move move;
+	move = _movesDex.find(rand() % _movesDex.size() + 1)->second;
 
+	if (move.mMoveID == _pokemon->mMove1.mMoveID || move.mMoveID == _pokemon->mMove2.mMoveID || move.mMoveID == _pokemon->mMove3.mMoveID || move.mMoveID == _pokemon->mMove4.mMoveID)
+		move = GenerateMove(_pokemon, _movesDex);
+
+	return move;
+}
+std::string ToUpper(std::string _str) {
+	for (int i = 0; i < _str.size() / sizeof(char); ++i)
+		_str.at(i) = std::toupper(_str.at(i));
+	return _str;
+}
 
 
 

@@ -10,18 +10,18 @@ void Pokemon::Display() {
 	if (mHeight == 0)
 		std::cout << "Height: unknown" << '\n';
 	else
-		std::cout << "Height: " << mHeight << '\n'; // in meters
+		std::cout << "Height: " << mHeight << "m\n"; // in meters
 	if (mWeight == 0)
 		std::cout << "Weight: unknown" << '\n';
 	else
-		std::cout << "Weight: " << mWeight << '\n'; // in kilograms
+		std::cout << "Weight: " << mWeight << "kg\n"; // in kilograms
 	//std::cout << "Weaknesses: " << mWeaknesses << '\n'; // damage ratios
 	//std::cout << "PrevEvolution: " << mPrevEvolution << '\n';
 	//std::cout << "NextEvolution: " << mNextEvolution << '\n';
-	//std::cout << "Move1: " << mMove1 << '\n';
-	//std::cout << "Move2: " << mMove2 << '\n';
-	//std::cout << "Move3: " << mMove3 << '\n';
-	//std::cout << "Move4: " << mMove4 << '\n';
+	std::cout << "Move1: " << mMove1.mName << '\n';
+	std::cout << "Move2: " << mMove2.mName << '\n';
+	std::cout << "Move3: " << mMove3.mName << '\n';
+	std::cout << "Move4: " << mMove4.mName << '\n';
 	//std::cout << "Entry: " << mEntry << '\n'; // Pokedex entry (description of pokemon)
 	std::cout << "Ability: " << mAbility << '\n'; // Potential pokemon abilities
 	std::cout << "ATK: " << mBaseAttack << '\n';

@@ -18,10 +18,10 @@ public:
 	Weakness mWeakness; // damage ratios
 	//Pokemon* mPrevEvolution;
 	//Pokemon* mNextEvolution;
-	//Move mMove1;
-	//Move mMove2;
-	//Move mMove3;
-	//Move mMove4;
+	Move mMove1;
+	Move mMove2;
+	Move mMove3;
+	Move mMove4;
 	std::string mEntry; // Pokedex entry (description of pokemon)
 	std::string mAbility; // Potential pokemon abilities
 	int mBaseAttack = 0;
