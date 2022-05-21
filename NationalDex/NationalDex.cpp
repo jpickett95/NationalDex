@@ -16,7 +16,7 @@ bool StrToBool(std::string _str);
 
 int main()
 {
-	// Open file & populate Pokedex with Pokemon
+	// Open file & populate Pokedex with Pokemon 
 	std::unordered_map<int, Pokemon*> NationalDex;
 	std::ifstream pokemonFile("pokemon.csv");
 	std::string line;
