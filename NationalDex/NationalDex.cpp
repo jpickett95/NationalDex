@@ -23,6 +23,7 @@ void PokemonLogoArt();
 // Main
 int main()
 {
+#if 0
 #pragma region
 	// Open file & populate Movedex with Moves
 	std::unordered_map<int, Move> MovesDex;
@@ -163,9 +164,15 @@ int main()
 	}
 	pokemonFile.close();
 #pragma endregion NationalDex
+#endif
 
+#pragma region
 	PokemonLogoArt();
 	NationalPokedexNameArt();
+	std::cout << "\t\t\tIncludes Pokemon from Generations I-VII!\n\n";
+	std::cout << "\t\tDeveloper: Jonah Pickett\tVersion: 1.0 - 5/21/2022\n";
+#pragma endregion Title Screen
+
 }
 
 
@@ -202,12 +209,12 @@ std::string ToUpper(std::string _str) {
 
 // Art
 void NationalPokedexNameArt() {
-	std::cout << "\n   _   _       _   _                   _     ____       _            _           " << '\n';
-	std::cout << "  | \\ | | __ _| |_(_) ___  _ __   __ _| |   |  _ \\ ___ | | _____  __| | _____  __" << '\n';
-	std::cout << "  |  \\| |/ _` | __| |/ _ \\| '_ \\ / _` | |   | |_) / _ \\| |/ / _ \\/ _` |/ _ \\ \\/ /" << '\n';
-	std::cout << "  | |\\  | (_| | |_| | (_) | | | | (_| | |   |  __/ (_) |   <  __/ (_| |  __/>  < " << '\n';
-	std::cout << "  |_| \\_|\\__,_|\\__|_|\\___/|_| |_|\\__,_|_|   |_|   \\___/|_|\\_\\___|\\__,_|\\___/_/\\_\\" << '\n';
-	std::cout << "                                                                                 " << '\n';
+	std::cout << "\n     _   _       _   _                   _     ____       _            _           " << '\n';
+	std::cout << "    | \\ | | __ _| |_(_) ___  _ __   __ _| |   |  _ \\ ___ | | _____  __| | _____  __" << '\n';
+	std::cout << "    |  \\| |/ _` | __| |/ _ \\| '_ \\ / _` | |   | |_) / _ \\| |/ / _ \\/ _` |/ _ \\ \\/ /" << '\n';
+	std::cout << "    | |\\  | (_| | |_| | (_) | | | | (_| | |   |  __/ (_) |   <  __/ (_| |  __/>  < " << '\n';
+	std::cout << "    |_| \\_|\\__,_|\\__|_|\\___/|_| |_|\\__,_|_|   |_|   \\___/|_|\\_\\___|\\__,_|\\___/_/\\_\\" << '\n';
+	std::cout << "                                                                                   " << '\n';
 }
 void PokemonLogoArt() {
 	std::cout << "\n\t                                   ,'\\" << '\n';
