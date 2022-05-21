@@ -38,8 +38,8 @@ int main()
 		Move currMove;
 
 		currMove.mName = strVector[0];
-		currMove.mType = strVector[1];
-		currMove.mCategory = strVector[2];
+		currMove.mType = ToUpper(strVector[1]);
+		currMove.mCategory = ToUpper(strVector[2]);
 		currMove.mPower = stoi(strVector[3]);
 		currMove.mAccuracy = stof(strVector[4]);
 		currMove.mNotes = strVector[5];
@@ -98,7 +98,7 @@ int main()
 		currPokemon->mBaseAttack = stoi(strVec[19]);
 
 		// Set Classification
-		currPokemon->mClassification = strVec[20];
+		currPokemon->mClassification = ToUpper(strVec[20]);
 
 		// Set Defense
 		currPokemon->mBaseDefense = stoi(strVec[21]);
@@ -110,7 +110,7 @@ int main()
 		currPokemon->mBaseHealth = stoi(strVec[23]);
 
 		// Set Name
-		currPokemon->mName = strVec[24];
+		currPokemon->mName = ToUpper(strVec[24]);
 
 		// Set Gender Percentage
 		currPokemon->mMalePercentage = stof(strVec[25]);
@@ -129,10 +129,10 @@ int main()
 		currPokemon->mBaseSpeed = stoi(strVec[29]);
 
 		// Set Type1
-		currPokemon->mType1 = strVec[30];
+		currPokemon->mType1 = ToUpper(strVec[30]);
 
 		// Set Type2
-		currPokemon->mType2 = strVec[31];
+		currPokemon->mType2 = ToUpper(strVec[31]);
 
 		// Set Weight
 		currPokemon->mWeight = stof(strVec[32]);
