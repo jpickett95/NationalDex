@@ -1,4 +1,4 @@
-// NationalDex.cpp : This file contains the 'main' function. Program execution begins and ends there.
+﻿// NationalDex.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
@@ -11,12 +11,16 @@
 #include <vector>
 #include <time.h>
 
-float StrToFloat(std::string _str);
-int StrToInt(std::string _str);
+float StrToFloat(std::string _str); // convert a string to a boolean
+int StrToInt(std::string _str); // convert a string 
 bool StrToBool(std::string _str);
 Move GenerateMove(Pokemon* _pokemon, std::unordered_map<int,Move> _movesDex);
 std::string ToUpper(std::string _str);
+void NationalPokedexNameArt();
+void PokemonLogoArt();
 
+
+// Main
 int main()
 {
 #pragma region
@@ -155,14 +159,16 @@ int main()
 		// Insert Pokemon into Pokedex 
 		std::pair<int, Pokemon*> currPair(currPokemon->mPokedexNumber, currPokemon);
 		NationalDex.insert(currPair);
-		NationalDex.find(currPokemon->mPokedexNumber)->second->Display();
+		//NationalDex.find(currPokemon->mPokedexNumber)->second->Display();
 	}
 	pokemonFile.close();
 #pragma endregion NationalDex
 
-	
-
+	PokemonLogoArt();
+	NationalPokedexNameArt();
 }
+
+
 
 // Methods
 float StrToFloat(std::string _str) {
@@ -191,6 +197,31 @@ std::string ToUpper(std::string _str) {
 	for (int i = 0; i < _str.size() / sizeof(char); ++i)
 		_str.at(i) = std::toupper(_str.at(i));
 	return _str;
+}
+
+
+// Art
+void NationalPokedexNameArt() {
+	std::cout << "\n   _   _       _   _                   _     ____       _            _           " << '\n';
+	std::cout << "  | \\ | | __ _| |_(_) ___  _ __   __ _| |   |  _ \\ ___ | | _____  __| | _____  __" << '\n';
+	std::cout << "  |  \\| |/ _` | __| |/ _ \\| '_ \\ / _` | |   | |_) / _ \\| |/ / _ \\/ _` |/ _ \\ \\/ /" << '\n';
+	std::cout << "  | |\\  | (_| | |_| | (_) | | | | (_| | |   |  __/ (_) |   <  __/ (_| |  __/>  < " << '\n';
+	std::cout << "  |_| \\_|\\__,_|\\__|_|\\___/|_| |_|\\__,_|_|   |_|   \\___/|_|\\_\\___|\\__,_|\\___/_/\\_\\" << '\n';
+	std::cout << "                                                                                 " << '\n';
+}
+void PokemonLogoArt() {
+	std::cout << "\n\t                                   ,'\\" << '\n';
+	std::cout << "\t     _.----.        ____         ,'  _\\   ___    ___     ____" << '\n';
+	std::cout << "\t _,-'       `.     |    |  /`.   \\,-'    |   \\  /   |   |    \\  |`." << '\n';
+	std::cout << "\t \\      __    \\    '-.  | /   `.  ___    |    \\/    |   '-.   \\ |  |" << '\n';
+	std::cout << "\t  \\.    \\ \\   |  __  |  |/    ,','_  `.  |          | __  |    \\|  |" << '\n';
+	std::cout << "\t    \\    \\/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |" << '\n';
+	std::cout << "\t     \\     ,-'/  /   \\    ,'   | \\/ / ,`.|         /  /   \\  |     |" << '\n';
+	std::cout << "\t      \\    \\ |   \\_/  |   `-.  \\    `'  /|  |    ||   \\_/  | |\\    |" << '\n';
+	std::cout << "\t       \\    \\ \\      /       `-.`.___,-' |  |\\  /| \\      /  | |   |" << '\n';
+	std::cout << "\t        \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |" << '\n';
+	std::cout << "\t         \\_.-'       |__|    `-._ |              '-.|     '-.| |   |" << '\n';
+	std::cout << "\t                                 `'                            '-._|" << '\n';
 }
 
 

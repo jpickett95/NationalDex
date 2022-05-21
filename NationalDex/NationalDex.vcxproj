@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\OneDrive\Documents\pokemon.csv" />
+    <None Include="moves.csv" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Move.h" />
