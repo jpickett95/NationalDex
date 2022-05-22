@@ -42,4 +42,5 @@ void Pokemon::Display() {
 	std::cout << "Legendary: " << isLegendary << '\n';
 	std::cout << "Caught: " << isCaught << '\n'; // determines whether the pokemon has been caught (future implementation)
 	std::cout << "Capture Rate: " << mCaptureRate << '\n';
+	std::cout << '\n';
 }

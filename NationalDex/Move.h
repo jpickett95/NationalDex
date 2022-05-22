@@ -11,6 +11,6 @@ public:
 	int mPower = 0;
 	float mAccuracy = 0; // percentage; between 1.0 - 0.0 
 	std::string mNotes; // notes on move
-	int mMoveID = 0;
+	unsigned int mMoveID = 0;
 };
 

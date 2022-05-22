@@ -18,12 +18,17 @@ Move GenerateMove(Pokemon* _pokemon, std::unordered_map<int,Move> _movesDex);
 std::string ToUpper(std::string _str);
 void NationalPokedexNameArt();
 void PokemonLogoArt();
+int DisplayMainMenu();
+void PikachuArt();
+void BulbasaurArt();
+void CharmanderArt();
+void SquirtleArt();
 
 
 // Main
 int main()
 {
-#if 0
+#if 1 // Filling Pokedex & Movedex
 #pragma region
 	// Open file & populate Movedex with Moves
 	std::unordered_map<int, Move> MovesDex;
@@ -57,7 +62,6 @@ int main()
 	}
 	movesFile.close();
 #pragma endregion MovesDex
-
 
 #pragma region
 	// Open file & populate Pokedex with Pokemon 
@@ -166,13 +170,113 @@ int main()
 #pragma endregion NationalDex
 #endif
 
+
 #pragma region
 	PokemonLogoArt();
 	NationalPokedexNameArt();
 	std::cout << "\t\t\tIncludes Pokemon from Generations I-VII!\n\n";
 	std::cout << "\t\tDeveloper: Jonah Pickett\tVersion: 1.0 - 5/21/2022\n";
+	std::cout << "\n\n\t\t\t";
+	system("pause"); // Press any key to continue . . .
 #pragma endregion Title Screen
 
+#pragma region
+	Pokemon* myPokemon = nullptr;
+	int starterSelection = -1;
+
+	system("cls");
+	std::cout << '\n';
+	PikachuArt();
+	std::cout << "\n 1.) Bulbasaur - The Seed Pokemon\n";
+	std::cout << "\n 2.) Charmander - The Lizard Pokemon\n";
+	std::cout << "\n 3.) Squirtle - The Tiny Turtle Pokemon\n";
+	while (starterSelection < 1 || starterSelection > 3) {
+		std::cout << "\n Please select your starter pokemon: ";
+		std::cin >> starterSelection;
+	}
+
+	switch (starterSelection) {
+	case 1:
+		system("cls");
+		std::cout << "\n\n\t\tYou Chose Bulbasaur!\n\n";
+		BulbasaurArt();
+		std::cout << "\n\t";
+		myPokemon = NationalDex.find(1)->second;
+		system("pause");
+		break;
+	case 2:
+		system("cls");
+		std::cout << "\n\n\tYou Chose Charmander!\n\n";
+		CharmanderArt();
+		std::cout << "\n\t";
+		myPokemon = NationalDex.find(4)->second;
+		system("pause");
+		break;
+	case 3: 
+		system("cls");
+		std::cout << "\n\n\tYou Chose Squirtle!\n\n";
+		SquirtleArt();
+		std::cout << "\n\t";
+		myPokemon = NationalDex.find(7)->second;
+		system("pause");
+		break;
+	}
+	myPokemon->isCaught = true;
+#pragma endregion Select Your Starter Pokemon
+
+#pragma region
+	system("cls");
+	int selected = -1;
+
+	while (selected != 0) {
+		selected = DisplayMainMenu();
+		int pokedexNo = -1; // used in case 1
+
+		switch (selected) {
+		case 0:
+			system("pause");
+			break;
+		case 1: // Find Pokemon
+			system("cls");
+			while (pokedexNo < 1 || pokedexNo > 801) {
+				std::cout << "\n\tPlease enter the pokedex number of the Pokemon you seek: ";
+				std::cin >> pokedexNo;
+			} 
+			std::cout << "\n\n";
+			NationalDex.find(pokedexNo)->second->Display();
+			system("pause");
+			break;
+		case 2: // Visit Wild Area
+			break;
+		case 3: // Learn New Moves
+			break;
+		case 4: // Change Selected Pokemon
+			system("cls");
+			std::cout << "\n\tYour current Pokemon is:\n";
+			myPokemon->Display();
+			
+			while (pokedexNo < 1 || pokedexNo > 801) {
+				std::cout << "\n Enter the pokedex number of the pokemon you wish to change to: ";
+				std::cin >> pokedexNo;
+			}
+			myPokemon = NationalDex.find(pokedexNo)->second;
+			std::cout << "\n\tYour current Pokemon is now:\n";
+			myPokemon->Display();
+			system("pause");
+			break;
+		case 5: // My Pokemon
+			system("cls");
+			std::cout << "\n\t===== My Pokemon =====\n";
+			myPokemon->Display();
+			system("pause");
+			break;
+		}
+	}
+
+#pragma endregion Main Menu
+
+	
+	return 0;
 }
 
 
@@ -193,7 +297,7 @@ bool StrToBool(std::string _str) {
 }
 Move GenerateMove(Pokemon* _pokemon, std::unordered_map<int, Move> _movesDex) {
 	Move move;
-	move = _movesDex.find(rand() % _movesDex.size() + 1)->second;
+	move = _movesDex.find(rand() % _movesDex.size() + 1)->second;  
 
 	if (move.mMoveID == _pokemon->mMove1.mMoveID || move.mMoveID == _pokemon->mMove2.mMoveID || move.mMoveID == _pokemon->mMove3.mMoveID || move.mMoveID == _pokemon->mMove4.mMoveID)
 		move = GenerateMove(_pokemon, _movesDex);
@@ -201,9 +305,27 @@ Move GenerateMove(Pokemon* _pokemon, std::unordered_map<int, Move> _movesDex) {
 	return move;
 }
 std::string ToUpper(std::string _str) {
-	for (int i = 0; i < _str.size() / sizeof(char); ++i)
+	for (int i = 0; i < _str.size() / (sizeof(char)); ++i)  
 		_str.at(i) = std::toupper(_str.at(i));
 	return _str;
+}
+int DisplayMainMenu() {
+	std::string menuOptions[6] = { "\t1 - Find Pokemon", "\t2 - Visit the Wild Area", "\t3 - Learn New Moves", "\t4 - Change My Pokemon", "\t5 - My Pokemon", "\t0 - Exit" };
+	int selection = -1;
+
+	system("cls");
+	NationalPokedexNameArt();
+	PikachuArt();
+	std::cout << "\n =+=+=+=+=+= Main Menu =+=+=+=+=+=\n\n";
+	for (int i = 0; i < 6; ++i)
+		std::cout << menuOptions[i] << '\n';
+
+	while (selection > 5 || selection < 0) {
+		std::cout << "\n Please make your selection: ";
+		std::cin >> selection;
+	}
+
+	return selection;
 }
 
 
@@ -229,6 +351,122 @@ void PokemonLogoArt() {
 	std::cout << "\t        \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |" << '\n';
 	std::cout << "\t         \\_.-'       |__|    `-._ |              '-.|     '-.| |   |" << '\n';
 	std::cout << "\t                                 `'                            '-._|" << '\n';
+}
+void PikachuArt() {
+	std::cout << "\n         \\:.             .:/ " << '\n';
+	std::cout << "          \\``._________.''/  " << '\n';
+	std::cout << "           \\             / " << '\n';
+	std::cout << "   .--.--, / .':.   .':. \\ " << '\n';
+	std::cout << "  /__:  /  | '::' . '::' | " << '\n';
+	std::cout << "     / /   |`.   ._.   .'| " << '\n';
+	std::cout << "    / /    |.'         '.| " << '\n';
+	std::cout << "   /___-_-,|.\\  \\   /  /.| " << '\n';
+	std::cout << "        // |''\\.;   ;,/ '| " << '\n';
+	std::cout << "        `==|:=         =:| " << '\n';
+	std::cout << "           `.          .' " << '\n';
+	std::cout << "             :-._____.-: " << '\n';
+	std::cout << "            `''       `'' " << '\n';
+}
+void BulbasaurArt() {
+	std::cout << "\n                                            /" << '\n';
+	std::cout << "                         _,.------....___,.' ',.-." << '\n';
+	std::cout << "                      ,-'          _,.--\"        |" << '\n';
+	std::cout << "                    ,'         _.-'              ." << '\n';
+	std::cout << "                   /   ,     ,'                   `" << '\n';
+	std::cout << "                  .   /     /                     ``." << '\n';
+	std::cout << "                  |  |     .                       \\.\\" << '\n';
+	std::cout << "        ____      |___._.  |       __               \\ `." << '\n';
+	std::cout << "      .'    `---\"\"       ``\"-.--\"'`  \\               .  " << '\n';
+	std::cout << "     .  ,            __               `              |   ." << '\n';
+	std::cout << "     `,'         ,-\"'  .               \\             |    L" << '\n';
+	std::cout << "    ,'          '    _.'                -._          /    |" << '\n';
+	std::cout << "   ,`-.    ,\".   `--'                      >.      ,'     |" << '\n';
+	std::cout << "  . .'\\'   `-'       __    ,  ,-.         /  `.__.-      ,'" << '\n';
+	std::cout << "  ||:, .           ,'  ;  /  / \\ `        `.    .      .'/" << '\n';
+	std::cout << "  ||:   \\          `--'  ' ,'_  . .         `.__, \\   , /" << '\n';
+	std::cout << " / L:_  |                 .  \"' :_;                `.'.'" << '\n';
+	std::cout << " .    \"\"'                  \"\"\"\"\"'                    V" << '\n';
+	std::cout << "  `.                                 .    `.   _,..  `" << '\n';
+	std::cout << "    `,_   .    .                _,-'/    .. `,'   __  `" << '\n';
+	std::cout << "     ) \\`._        ___....----\"'  ,'   .'  \\ |   '  \\  ." << '\n';
+	std::cout << "    /   `. \"`-.--\"'         _,' ,'     `---' |    `./  |" << '\n';
+	std::cout << "   .   _  `\"\"'--.._____..--\"   ,             '         |" << '\n';
+	std::cout << "   | .\" `. `-.                /-.           /          ," << '\n';
+	std::cout << "   | `._.'    `,_            ;  /         ,'          ." << '\n';
+	std::cout << "  .'          /| `-.        . ,'         ,           ," << '\n';
+	std::cout << "  '-.__ __ _,','    '`-..___;-...__   ,.'\\ ____.___.'" << '\n';
+	std::cout << "  `\"^--'..'   '-`-^-'\"--    `-^-'`.''\"\"\"\"\"`.,^.`.--' " << '\n';
+}
+void CharmanderArt() {
+	std::cout << "\n               _.--\"\"`-.." << '\n';
+	std::cout << "             ,'          `." << '\n';
+	std::cout << "           ,'          __  `." << '\n';
+	std::cout << "          /|          \" __   \\" << '\n';
+	std::cout << "         , |           / |.   ." << '\n';
+	std::cout << "         |,'          !_.'|   |" << '\n';
+	std::cout << "       ,'             '   |   |" << '\n';
+	std::cout << "      /              |`--'|   |" << '\n';
+	std::cout << "     |                `---'   |" << '\n';
+	std::cout << "      .   ,                   |                       ,\"." << '\n';
+	std::cout << "       ._     '           _'  |                    , ' \\ `" << '\n';
+	std::cout << "   `.. `.`-...___,...---\"\"    |       __,.        ,`\"   L,|" << '\n';
+	std::cout << "   |, `- .`._        _,-,.'   .  __.-'-. /        .   ,    \\" << '\n';
+	std::cout << " -:..     `. `-..--_.,.<       `\"      / `.        `-/ |   ." << '\n';
+	std::cout << "   `,         \"\"\"\"'     `.              ,'         |   |  ',," << '\n';
+	std::cout << "     `.      '            '            /          '    |'. |/" << '\n';
+	std::cout << "       `.   |              \       _,-'           |       ''" << '\n';
+	std::cout << "         `._'               \   '\"\\                .      |" << '\n';
+	std::cout << "            |                '     \\                `._  ,'" << '\n';
+	std::cout << "            |                 '     \\                 .'|" << '\n';
+	std::cout << "            |                 .      \\                | |" << '\n';
+	std::cout << "            |                 |       L              ,' |" << '\n';
+	std::cout << "            `                 |       |             /   '" << '\n';
+	std::cout << "             \\                |       |           ,'   /" << '\n';
+	std::cout << "           ,' \\               |  _.._ ,-..___,..-'    ,'" << '\n';
+	std::cout << "          /     .             .      `!             ,j'" << '\n';
+	std::cout << "         /       `.          /        .           .'/" << '\n';
+	std::cout << "        .          `.       /         |        _.'.'" << '\n';
+	std::cout << "         `.          7`'---'          |------\"'_.'" << '\n';
+	std::cout << "        _,.`,_     _'                ,''-----\"'" << '\n';
+	std::cout << "    _,-_    '       `.     .'      ,\\" << '\n';
+	std::cout << "    -\" /`.         _,'     | _  _  _.|" << '\n';
+	std::cout << "     \"\"--'---\"\"\"\"\"'        `' '! |! /" << '\n';
+	std::cout << "                             `\" \" -' " << '\n';
+}
+void SquirtleArt() {
+	std::cout << "\n                _,........__ " << '\n';
+	std::cout << "             ,-'            \"`-." << '\n';
+	std::cout << "           ,'                   `-." << '\n';
+	std::cout << "         ,'                        \\" << '\n';
+	std::cout << "       ,'                           ." << '\n';
+	std::cout << "       .'\\               ,\"\".       `" << '\n';
+	std::cout << "      ._.'|             / |  `       \\" << '\n';
+	std::cout << "      |   |            `-.'  ||       `." << '\n';
+	std::cout << "      |   |            '-._,'||       | \\" << '\n';
+	std::cout << "      .`.,'             `..,'.'       , |`-." << '\n';
+	std::cout << "      l                       .'`.  _/  |   `." << '\n';
+	std::cout << "      `-.._'-   ,          _ _'   -\" \\  .     `" << '\n';
+	std::cout << " `.\"\"\"\"\"'-.`-...,---------','         `. `....__." << '\n';
+	std::cout << " .'        `\"-..___      __,'\\          \\  \\     \\" << '\n';
+	std::cout << " \\_ .          |   `\"\"\"\"'    `.           . \\     \\ " << '\n';
+	std::cout << "   `.          |              `.          |  .     L" << '\n';
+	std::cout << "     `.        |`--...________.'.        j   |     |" << '\n';
+	std::cout << "       `._    .'      |          `.     .|   ,     |" << '\n';
+	std::cout << "          `--,\\       .            `7\"\"' |  ,      |" << '\n';
+	std::cout << "             ` `      `            /     |  |      |    _,-'\"\"\"`-." << '\n';
+	std::cout << "              \\ `.     .          /      |  '      |  ,'          `." << '\n';
+	std::cout << "               \\  v.__  .        '       .   \\    /| /              \\" << '\n';
+	std::cout << "                \\/    `\"\"\\\"\"\"\"\"\"\"`.       \\   \\  /.''                |" << '\n';
+	std::cout << "                 `        .        `._ ___,j.  `/ .-       ,---.     |" << '\n';
+	std::cout << "                 ,`-.      \\         .\"     `.  |/        j     `    |" << '\n';
+	std::cout << "                /    `.     \\       /         \\ /         |     /    j" << '\n';
+	std::cout << "               |       `-.   7-.._ .          |\"          '         /" << '\n';
+	std::cout << "               |          `./_    `|          |            .     _,'" << '\n';
+	std::cout << "               `.           / `----|          |-............`---'" << '\n';
+	std::cout << "                 \\          \\      |          |" << '\n';
+	std::cout << "                ,'           )     `.         |" << '\n';
+	std::cout << "                 7____,,..--'      /          |" << '\n';
+	std::cout << "                                   `---.__,--.'" << '\n';
 }
 
 
