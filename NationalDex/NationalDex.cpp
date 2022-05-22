@@ -25,7 +25,9 @@ void CharmanderArt();
 void SquirtleArt();
 void LearnNewMove(Pokemon* _pokemon, std::unordered_map<int, Move> _movesDex);
 void BattleWildPokemon(Pokemon* _pokemon, std::unordered_map<int, Pokemon*> _pokedex);
-int GenerateHPVisual(int _hp);
+void GenerateHPVisual(int _hp, Pokemon* _pokemon);
+int CalculateDamage(Move _move, Pokemon* _pokemon1, Pokemon* _pokemon2);
+float WeaknessFactor(Pokemon* _pokemon, Move _move);
 
 // Main
 int main()
@@ -341,7 +343,7 @@ void LearnNewMove(Pokemon* _pokemon, std::unordered_map<int, Move> _movesDex) {
 	std::cout << " ========== Moves =========\n";
 	std::cout << " Move1: " << _pokemon->mMove1.mName << "\n Move2: " << _pokemon->mMove2.mName << "\n Move3: " << _pokemon->mMove3.mName << "\n Move4: " << _pokemon->mMove4.mName << '\n';
 
-	while (selection > 5 || selection < 1) {
+	while (selection > 4 || selection < 1) {
 		std::cout << " Which Move would you like to change? #";
 		std::cin >> selection;
 	}
@@ -367,6 +369,7 @@ void LearnNewMove(Pokemon* _pokemon, std::unordered_map<int, Move> _movesDex) {
 }
 void BattleWildPokemon(Pokemon* _pokemon, std::unordered_map<int, Pokemon*> _pokedex) {
 	system("cls");
+	srand(time(NULL));
 	int randomPokemon = rand() % 801 + 1;
 	Pokemon* wildPokemon = _pokedex.find(randomPokemon)->second;
 	std::cout << "\n  __      __.__.__       .___  ___________                                 __               ._." << '\n';
@@ -380,18 +383,107 @@ void BattleWildPokemon(Pokemon* _pokemon, std::unordered_map<int, Pokemon*> _pok
 	}
 	else
 		std::cout << "\tYou encountered a wild female " << wildPokemon->mName << "!\n";
+	
 	int healthPts = wildPokemon->mBaseHealth;
-
-
+	while (healthPts > 0) {
+		GenerateHPVisual(healthPts, wildPokemon);
+		std::cout << " ========== Moves =========\n";
+		std::cout << " Move1: " << _pokemon->mMove1.mName << "\n Move2: " << _pokemon->mMove2.mName << "\n Move3: " << _pokemon->mMove3.mName << "\n Move4: " << _pokemon->mMove4.mName << "\n 0 - Back to Main Menu" << '\n';
+		int move = -1;
+		while (move < 0 || move > 4) {
+			std::cout << " Please select your move: #";
+			std::cin >> move;
+		}
+		switch (move) {
+		case 0:
+			healthPts = 0;
+			break;
+		case 1:
+			healthPts -= CalculateDamage(_pokemon->mMove1, _pokemon, wildPokemon);
+			break;
+		case 2:
+			healthPts -= CalculateDamage(_pokemon->mMove2, _pokemon, wildPokemon);
+			break;
+		case 3:
+			healthPts -= CalculateDamage(_pokemon->mMove3, _pokemon, wildPokemon);
+			break;
+		case 4:
+			healthPts -= CalculateDamage(_pokemon->mMove4, _pokemon, wildPokemon);
+			break;
+		}
+	}
+	std::cout << "\n\t" << wildPokemon->mName << " fainted! - You won!\n\t";
+	system("Color 07");
 }
-int GenerateHPVisual(int _hp) {
-	int hp;
-	if(_hp > 15)
-	std::cout << "\n ";
-	for (int i = 0; i < hp; ++i)
+void GenerateHPVisual(int _hp, Pokemon* _pokemon) {
+	std::cout << "\n\t" << _pokemon->mName << "'s Health Points:\n";
+	for (int i = 0; i < _hp; ++i) {
+		if (_hp > _pokemon->mBaseHealth * .65)
+			system("Color 02");
+		else if (_hp > _pokemon->mBaseHealth * .25)
+			system("Color 06");
+		else if (_hp < _pokemon->mBaseHealth * .25)
+			system("Color 04");
 		std::cout << " <> ";
+		if (i % 15 == 0 && i != 0)
+			std::cout << '\n';
+	} 
+	std::cout << "\n\n";
+}
+int CalculateDamage(Move _move, Pokemon* _pokemon1, Pokemon* _pokemon2) {
+	int damage = 0;
+	bool miss = true;
+	if (rand() % 100 <= _move.mAccuracy * 100)
+		miss = false;
+	if (miss == false) {
+		if (_move.mCategory == "PHYSICAL")
+			damage = (_move.mPower / _pokemon2->mBaseDefense) * _pokemon1->mBaseAttack;
+		else if (_move.mCategory == "SPECIAL")
+			damage = (_move.mPower / _pokemon2->mBaseSpecialDefense) * _pokemon1->mBaseSpecialAttack;
+	}
+	damage = damage * WeaknessFactor(_pokemon2, _move);
+	std::cout << "\n\tYou did " << damage << " damage!\n";
+	return damage;
+}
+float WeaknessFactor(Pokemon* _pokemon, Move _move) {
+	std::string moveType = ToUpper(_move.mType);
 
-	return hp;
+	if(moveType == "BUG")
+		return _pokemon->mWeakness.against_bug;
+	else if (moveType == "DARK")
+		return _pokemon->mWeakness.against_dark;
+	else if (moveType == "DRAGON")
+		return _pokemon->mWeakness.against_dragon;
+	else if(moveType == "ELECTRIC")
+		return _pokemon->mWeakness.against_electric;
+	else if (moveType == "FAIRY")
+		return _pokemon->mWeakness.against_fairy;
+	else if (moveType == "FIGHT")
+		return _pokemon->mWeakness.against_fight;
+	else if (moveType == "FIRE")
+		return _pokemon->mWeakness.against_fire;
+	else if (moveType == "FLYING")
+		return _pokemon->mWeakness.against_flying;
+	else if (moveType == "GHOST")
+		return _pokemon->mWeakness.against_ghost;
+	else if (moveType == "GRASS")
+		return _pokemon->mWeakness.against_grass;
+	else if (moveType == "GROUND")
+		return _pokemon->mWeakness.against_ground;
+	else if (moveType == "ICE")
+		return _pokemon->mWeakness.against_ice;
+	else if (moveType == "NORMAL")
+		return _pokemon->mWeakness.against_normal;
+	else if (moveType == "POISON")
+		return _pokemon->mWeakness.against_poison;
+	else if (moveType == "PSYCHIC")
+		return _pokemon->mWeakness.against_psychic;
+	else if (moveType == "ROCK")
+		return _pokemon->mWeakness.against_rock;
+	else if (moveType == "STEEL")
+		return _pokemon->mWeakness.against_steel;
+	else if (moveType == "WATER")
+		return _pokemon->mWeakness.against_water;
 }
 
 
