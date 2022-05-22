@@ -23,7 +23,9 @@ void PikachuArt();
 void BulbasaurArt();
 void CharmanderArt();
 void SquirtleArt();
-
+void LearnNewMove(Pokemon* _pokemon, std::unordered_map<int, Move> _movesDex);
+void BattleWildPokemon(Pokemon* _pokemon, std::unordered_map<int, Pokemon*> _pokedex);
+int GenerateHPVisual(int _hp);
 
 // Main
 int main()
@@ -247,8 +249,15 @@ int main()
 			system("pause");
 			break;
 		case 2: // Visit Wild Area
+			BattleWildPokemon(myPokemon, NationalDex);
+			system("pause");
 			break;
 		case 3: // Learn New Moves
+			system("cls");
+			std::cout << "\n\tYour current Pokemon is:\n";
+			myPokemon->Display();
+			LearnNewMove(myPokemon, MovesDex);
+			system("pause");
 			break;
 		case 4: // Change Selected Pokemon
 			system("cls");
@@ -326,6 +335,63 @@ int DisplayMainMenu() {
 	}
 
 	return selection;
+}
+void LearnNewMove(Pokemon* _pokemon, std::unordered_map<int, Move> _movesDex) {
+	int selection = -1;
+	std::cout << " ========== Moves =========\n";
+	std::cout << " Move1: " << _pokemon->mMove1.mName << "\n Move2: " << _pokemon->mMove2.mName << "\n Move3: " << _pokemon->mMove3.mName << "\n Move4: " << _pokemon->mMove4.mName << '\n';
+
+	while (selection > 5 || selection < 1) {
+		std::cout << " Which Move would you like to change? #";
+		std::cin >> selection;
+	}
+
+	switch (selection) {
+	case 1:
+		_pokemon->mMove1 = GenerateMove(_pokemon, _movesDex);
+		break;
+	case 2:
+		_pokemon->mMove2 = GenerateMove(_pokemon, _movesDex);
+		break;
+	case 3:
+		_pokemon->mMove3 = GenerateMove(_pokemon, _movesDex);
+		break;
+	case 4:
+		_pokemon->mMove4 = GenerateMove(_pokemon, _movesDex);
+		break;
+	}
+
+	system("cls");
+	std::cout << "\n\tYour current Pokemon is:\n";
+	_pokemon->Display();
+}
+void BattleWildPokemon(Pokemon* _pokemon, std::unordered_map<int, Pokemon*> _pokedex) {
+	system("cls");
+	int randomPokemon = rand() % 801 + 1;
+	Pokemon* wildPokemon = _pokedex.find(randomPokemon)->second;
+	std::cout << "\n  __      __.__.__       .___  ___________                                 __               ._." << '\n';
+	std::cout << " /  \\    /  \\__|  |    __| _/  \\_   _____/ ____   ____  ____  __ __  _____/  |_  ___________| |" << '\n';
+	std::cout << " \\   \\/\\/   /  |  |   / __ |    |    __)_ /    \\_/ ___\\/  _ \\|  |  \\/    \\   __\\/ __ \\_  __ \\ |" << '\n';
+	std::cout << "  \\        /|  |  |__/ /_/ |    |        \\   |  \\  \\__(  <_> )  |  /   |  \\  | \\  ___/|  | \\/\\|" << '\n';
+	std::cout << "   \\__/\\  / |__|____/\\____ |   /_______  /___|  /\\___  >____/|____/|___|  /__|  \\___  >__|   __" << '\n';
+	std::cout << "        \\/                \\/           \\/     \\/     \\/                 \\/          \\/       \\/" << "\n\n";
+	if (rand()  % 100 <= wildPokemon->mMalePercentage) {
+		std::cout << "\tYou encountered a wild male " << wildPokemon->mName << "!\n";
+	}
+	else
+		std::cout << "\tYou encountered a wild female " << wildPokemon->mName << "!\n";
+	int healthPts = wildPokemon->mBaseHealth;
+
+
+}
+int GenerateHPVisual(int _hp) {
+	int hp;
+	if(_hp > 15)
+	std::cout << "\n ";
+	for (int i = 0; i < hp; ++i)
+		std::cout << " <> ";
+
+	return hp;
 }
 
 
