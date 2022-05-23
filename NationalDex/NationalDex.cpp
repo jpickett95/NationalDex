@@ -10,6 +10,8 @@
 #include <sstream>
 #include <vector>
 #include <time.h>
+#include <chrono>
+#include <thread>
 
 float StrToFloat(std::string _str); // convert a string to a boolean
 int StrToInt(std::string _str); // convert a string 
@@ -28,6 +30,7 @@ void BattleWildPokemon(Pokemon* _pokemon, std::unordered_map<int, Pokemon*> _pok
 void GenerateHPVisual(int _hp, Pokemon* _pokemon);
 int CalculateDamage(Move _move, Pokemon* _pokemon1, Pokemon* _pokemon2);
 float WeaknessFactor(Pokemon* _pokemon, Move _move);
+bool CatchPokemon(Pokemon* _pokemon);
 
 // Main
 int main()
@@ -252,6 +255,7 @@ int main()
 			break;
 		case 2: // Visit Wild Area
 			BattleWildPokemon(myPokemon, NationalDex);
+			std::cout << "\n\n";
 			system("pause");
 			break;
 		case 3: // Learn New Moves
@@ -385,7 +389,8 @@ void BattleWildPokemon(Pokemon* _pokemon, std::unordered_map<int, Pokemon*> _pok
 		std::cout << "\tYou encountered a wild female " << wildPokemon->mName << "!\n";
 	
 	int healthPts = wildPokemon->mBaseHealth;
-	while (healthPts > 0) {
+	bool skipBattle = false;
+	while (healthPts > 0 && skipBattle == false) {
 		GenerateHPVisual(healthPts, wildPokemon);
 		std::cout << " ========== Moves =========\n";
 		std::cout << " Move1: " << _pokemon->mMove1.mName << "\n Move2: " << _pokemon->mMove2.mName << "\n Move3: " << _pokemon->mMove3.mName << "\n Move4: " << _pokemon->mMove4.mName << "\n 0 - Back to Main Menu" << '\n';
@@ -397,6 +402,7 @@ void BattleWildPokemon(Pokemon* _pokemon, std::unordered_map<int, Pokemon*> _pok
 		switch (move) {
 		case 0:
 			healthPts = 0;
+			skipBattle = true;
 			break;
 		case 1:
 			healthPts -= CalculateDamage(_pokemon->mMove1, _pokemon, wildPokemon);
@@ -412,8 +418,19 @@ void BattleWildPokemon(Pokemon* _pokemon, std::unordered_map<int, Pokemon*> _pok
 			break;
 		}
 	}
-	std::cout << "\n\t" << wildPokemon->mName << " fainted! - You won!\n\t";
 	system("Color 07");
+	if (skipBattle != true) {
+		std::cout << "\n\t" << wildPokemon->mName << " fainted! - You won!\n\tLet's try to catch it!\n";
+		while (wildPokemon->isCaught == false) {
+			wildPokemon->isCaught = CatchPokemon(wildPokemon);
+			std::this_thread::sleep_for(std::chrono::seconds(1)); 
+			if (wildPokemon->isCaught == false)
+				std::cout << "\n\tThe wild " << wildPokemon->mName << " broke free!Let's try again!\n\t";
+			else if (wildPokemon->isCaught == true)
+				std::cout << "\n\tThe wild " << wildPokemon->mName << " was caught! Congrats!\n\t";
+		}
+	}
+	
 }
 void GenerateHPVisual(int _hp, Pokemon* _pokemon) {
 	std::cout << "\n\t" << _pokemon->mName << "'s Health Points:\n";
@@ -441,7 +458,9 @@ int CalculateDamage(Move _move, Pokemon* _pokemon1, Pokemon* _pokemon2) {
 		else if (_move.mCategory == "SPECIAL")
 			damage = (_move.mPower / _pokemon2->mBaseSpecialDefense) * _pokemon1->mBaseSpecialAttack;
 	}
-	damage = damage * WeaknessFactor(_pokemon2, _move);
+	damage = (damage * WeaknessFactor(_pokemon2, _move)) / 3;
+	if (damage < 1)
+		damage = 1;
 	std::cout << "\n\tYou did " << damage << " damage!\n";
 	return damage;
 }
@@ -484,6 +503,15 @@ float WeaknessFactor(Pokemon* _pokemon, Move _move) {
 		return _pokemon->mWeakness.against_steel;
 	else if (moveType == "WATER")
 		return _pokemon->mWeakness.against_water;
+}
+bool CatchPokemon(Pokemon* _pokemon) {
+	srand(time(NULL));
+	int n = rand() % 150;
+	if (n > _pokemon->mCaptureRate)
+		return false;
+	else {
+		return true;
+	}
 }
 
 
