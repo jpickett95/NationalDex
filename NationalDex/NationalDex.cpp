@@ -179,12 +179,14 @@ int main()
 
 
 #pragma region
+	system("Color 06");
 	PokemonLogoArt();
 	NationalPokedexNameArt();
 	std::cout << "\t\t\tIncludes Pokemon from Generations I-VII!\n\n";
 	std::cout << "\t\tDeveloper: Jonah Pickett\tVersion: 1.0 - 5/21/2022\n";
 	std::cout << "\n\n\t\t\t";
 	system("pause"); // Press any key to continue . . .
+	system("Color 07");
 #pragma endregion Title Screen
 
 #pragma region
@@ -333,7 +335,7 @@ int DisplayMainMenu() {
 	PikachuArt();
 	std::cout << "\n =+=+=+=+=+= Main Menu =+=+=+=+=+=\n\n";
 	for (int i = 0; i < 6; ++i)
-		std::cout << menuOptions[i] << '\n';
+		std::cout << " " << menuOptions[i] << '\n';
 
 	while (selection > 5 || selection < 0) {
 		std::cout << "\n Please make your selection: ";
